@@ -4,10 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Html;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,12 +36,10 @@ public class HoldersServices {
         BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
         String json = reader.readLine();
 
-
         jsonArray = new JSONArray(json);
 
         for (int i = 0; i < jsonArray.length(); i++) {
-
-            Holder holder= new Holder();
+            Holder holder = new Holder();
 
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             holder.setTitle(Html.fromHtml(jsonObject.getString("title")).toString());
@@ -53,12 +47,13 @@ public class HoldersServices {
 
             InputStream in = new java.net.URL(holder.getImageUrl()).openStream();
             Bitmap bitmap = BitmapFactory.decodeStream(in);
+
             holder.setImage(bitmap);
 
             holders.add(holder);
-
         }
 
         return holders;
     }
+
 }

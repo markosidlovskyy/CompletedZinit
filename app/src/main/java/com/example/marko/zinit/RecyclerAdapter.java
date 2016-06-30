@@ -2,7 +2,7 @@ package com.example.marko.zinit;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
  * Created by Marko on 6/30/2016.
  */
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>  {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     Context context;
     List<Holder> holders;
@@ -59,9 +60,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, DetailsActivity.class);
-            int position=getAdapterPosition();
-            intent.putExtra("item", (Parcelable) holders.get(position));
+            int position = getAdapterPosition();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            Bitmap bmp = holders.get(position).getImage();
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
 
+            intent.putExtra("image", byteArray);
+            intent.putExtra("title", holders.get(position).getTitle());
             context.startActivity(intent);
         }
     }
